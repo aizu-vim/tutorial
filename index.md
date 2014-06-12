@@ -2,10 +2,15 @@
 layout: default
 ---
 
+# スライド一覧
+
+{% slide_list %}
+* [{{ slide }}](slide/{{ slide }}.html)
+{% endslide_list %}
+
+# Posts
+
 <div class="home">
-
-  <h1>Posts</h1>
-
   <ul class="posts">
     {% for post in site.posts %}
       <li>
@@ -14,7 +19,5 @@ layout: default
       </li>
     {% endfor %}
   </ul>
-
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
-
 </div>

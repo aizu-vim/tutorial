@@ -1,0 +1,86 @@
+#!/bin/bash
+
+#
+# dateコマンドの結果をdate.logに書き込む（確認用）
+#
+function run_date() {
+    TMPDIR=`mktemp -d`
+    pushd $TMPDIR
+    git clone --single-branch -b gh-pages git://github.com/aizu-vim/tutorial.git
+    cd tutorial
+    mkdir -p ${GH_PREFIX} || true
+    echo "hello: `date +'%s'`" >> ${GH_PREFIX}date.log
+    git add ${GH_PREFIX}date.log
+    git commit -m 'wip: date.log'
+    git push --quiet https://${GITHUB_TOKEN}@github.com/aizu-vim/tutorial.git gh-pages
+    popd
+}
+
+#
+# jekyll build
+#
+function run_jekyll() {
+    TMPDIR=`mktemp -d`
+
+    # 親ディレクトリでビルド
+    pushd $TMPDIR
+    git clone --single-branch -b ${TRAVIS_BRANCH} git://github.com/aizu-vim/tutorial.git
+    cd tutorial
+    erb _config.yml > _config.tmp
+    mv _config.tmp _config.yml
+    bundle exec jekyll build -- --baseurl /tutorial/${GH_PREFIX}
+
+    git clone --single-branch -b gh-pages git://github.com/aizu-vim/tutorial.git gh-pages
+    mkdir -p gh-pages/${GH_PREFIX} || true
+
+    # 小ディレクトリに配置して git-push
+    cp -r _site/* gh-pages/${GH_PREFIX}/
+    cd gh-pages
+    git add .
+    git commit -m '$ jekyll build'
+    git push --quiet https://${GITHUB_TOKEN}@github.com/aizu-vim/tutorial.git gh-pages
+
+    popd
+}
+
+#
+# slideshow
+#
+function run_slideshow() {
+    TMPDIR=`mktemp -d`
+
+    # 親ディレクトリでビルド
+    pushd $TMPDIR
+    git clone --single-branch -b ${TRAVIS_BRANCH} git://github.com/aizu-vim/tutorial.git
+    cd tutorial
+
+    find _slide -type f -print0 | xargs -I$$ -0 sh -c "bundle exec slideshow build -o \`dirname $$ | sed s/^.//\` $$"
+
+    git clone --single-branch -b gh-pages git://github.com/aizu-vim/tutorial.git gh-pages
+    mkdir -p gh-pages/${GH_PREFIX} || true
+
+    # 小ディレクトリに配置して git-push
+    cp -r slide/ gh-pages/${GH_PREFIX}/
+    cd gh-pages
+    git add .
+    git commit -m '$ slideshow build -o slide'
+    git push --quiet https://${GITHUB_TOKEN}@github.com/aizu-vim/tutorial.git gh-pages
+
+    popd
+}
+
+#
+# config
+#
+MASTER_BRANCH=master
+
+if [ "${MASTER_BRANCH}" = "${TRAVIS_BRANCH}" ]; then
+  export GH_PREFIX=
+else
+  export GH_PREFIX=branches/${TRAVIS_BRANCH}
+fi
+
+run_date
+run_jekyll
+run_slideshow
+
