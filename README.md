@@ -1,6 +1,6 @@
 # チュートリアル関連
 
-[![Build Status](https://travis-ci.org/aizu-vim/tutorial.svg?branch=wip%2Ftravis)](https://travis-ci.org/aizu-vim/tutorial)
+[![Build Status](https://travis-ci.org/aizu-vim/tutorial.svg?branch=master)](https://travis-ci.org/aizu-vim/tutorial)
 
 ## 方針
 
