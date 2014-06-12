@@ -7,7 +7,9 @@
 
 * Ruby をインストールしておくこと
 
-    $ bundle install
+```
+$ bundle install
+```
 
 ## ブログをローカルで確認する
 
