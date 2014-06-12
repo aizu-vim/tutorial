@@ -29,7 +29,7 @@
 * `master`ブランチの内容を反映しているURL
   * `https://aizu-vim.github.io/tutorial/`
 * そのほかのブランチ
-  * `https://aizu-vim.github.io/tutorial/branches/{repo}/`
+  * `https://aizu-vim.github.io/tutorial/branches/{branch}/`
 
 
 ## ディレクトリについて
