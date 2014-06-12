@@ -7,6 +7,33 @@
     <atom:link href="http://aizu-vim.github.io/tutorial/tutorial/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>やったこと（記事のサンプル）</title>
+        <description>&lt;p&gt;Travis CI 周りの整備をおこないました。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;各種ブランチに push すると Travis 経由で GitHub Pages を更新&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;GitHub Pages 周りというのは具体的に、&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;jekyll という静的なブログシステムのビルドを実行（HTMLファイル等の生成）&lt;/li&gt;
+  &lt;li&gt;slideshow という静的なスライドのビルドを実行（HTMLファイル等の生成）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;などをやっています。&lt;/p&gt;
+
+&lt;p&gt;実際記事やスライドの執筆を行うときは、
+Markdown ファイルだけを記述すれば良いので楽な感じになってます。
+（慣れないと難しいかもしれない）&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 12 Jun 2014 22:24:00 +0000</pubDate>
+        <link>http://aizu-vim.github.io/tutorial/tutorial/update/2014/06/12/changelog/</link>
+        <guid isPermaLink="true">http://aizu-vim.github.io/tutorial/tutorial/update/2014/06/12/changelog/</guid>
+      </item>
+    
+      <item>
         <title>Welcome to Jekyll!</title>
         <description>&lt;p&gt;You’ll find this post in your &lt;code&gt;_posts&lt;/code&gt; directory - edit this post and re-build (or run with the &lt;code&gt;-w&lt;/code&gt; switch) to see your changes!
 To add new posts, simply add a file in the &lt;code&gt;_posts&lt;/code&gt; directory that follows the convention: YYYY-MM-DD-name-of-post.ext.&lt;/p&gt;
