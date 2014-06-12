@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 2.1.*
+before_script:
+  - git config --global user.email "sh19910711+ynkkowrv0b14@gmail.com"
+  - git config --global user.name "Mr. Bot"
+script:
+  - _script/build
+env:
+  - secure: "O6lUDJRS7YqkxZuIQUEvmP3qBLu4nq5oXBkLMYV1O2V2PnvJMz101CbXVjuylsnwT8oLV6Kks9q5PjnQVI1H90xae1POgEQJt4Ll43yuUVKNgVnwvgIZymHA7xWgax56hqF8A6D2+lqmMCJ8koYVAWAATq+jsTk5qjWF+8B1zlw="
+
