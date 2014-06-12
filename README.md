@@ -2,6 +2,16 @@
 
 [![Build Status](https://travis-ci.org/aizu-vim/tutorial.svg?branch=wip%2Ftravis)](https://travis-ci.org/aizu-vim/tutorial)
 
+## 方針
+
+検討中...
+
+* スライド
+  * 各種チュートリアルはこの辺に
+  * PDFとかも置けるようにする (TODO)
+* ブログ
+  * 更新履歴とかを適当にまとめる？
+
 ## ブランチについて
 
 * `master`: このブランチの内容が gh-pages に反映される
