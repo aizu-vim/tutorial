@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title></title>
-    <description></description>
-    <link>/</link>
-    <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
+    <title>Your awesome title</title>
+    <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</description>
+    <link>http://aizu-vim.github.io/tutorial/tutorial/branches/wip/rake/</link>
+    <atom:link href="http://aizu-vim.github.io/tutorial/tutorial/branches/wip/rake/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
         <title>やったこと（記事のサンプル）</title>
@@ -29,8 +29,8 @@ Markdown ファイルだけを記述すれば良いので楽な感じになっ�
 
 </description>
         <pubDate>Thu, 12 Jun 2014 22:24:00 +0000</pubDate>
-        <link>/update/2014/06/12/changelog.html</link>
-        <guid isPermaLink="true">/update/2014/06/12/changelog.html</guid>
+        <link>http://aizu-vim.github.io/tutorial/tutorial/branches/wip/rake/update/2014/06/12/changelog/</link>
+        <guid isPermaLink="true">http://aizu-vim.github.io/tutorial/tutorial/branches/wip/rake/update/2014/06/12/changelog/</guid>
       </item>
     
       <item>
@@ -50,8 +50,8 @@ To add new posts, simply add a file in the &lt;code&gt;_posts&lt;/code&gt; direc
 
 </description>
         <pubDate>Thu, 12 Jun 2014 18:10:13 +0000</pubDate>
-        <link>/jekyll/update/2014/06/12/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">/jekyll/update/2014/06/12/welcome-to-jekyll.html</guid>
+        <link>http://aizu-vim.github.io/tutorial/tutorial/branches/wip/rake/jekyll/update/2014/06/12/welcome-to-jekyll/</link>
+        <guid isPermaLink="true">http://aizu-vim.github.io/tutorial/tutorial/branches/wip/rake/jekyll/update/2014/06/12/welcome-to-jekyll/</guid>
       </item>
     
   </channel>

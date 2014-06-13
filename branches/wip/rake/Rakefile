@@ -1,0 +1,4 @@
+task :server do
+  system 'erb _config.yml > tmp/_config.yml'
+  system 'bundle exec jekyll server --config tmp/_config.yml'
+end
