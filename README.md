@@ -1,6 +1,6 @@
 # チュートリアル関連
 
-[![Build Status](https://travis-ci.org/aizu-vim/tutorial.svg?branch=wip%2Ftravis)](https://travis-ci.org/aizu-vim/tutorial)
+[![Build Status](https://travis-ci.org/aizu-vim/tutorial.svg?branch=master)](https://travis-ci.org/aizu-vim/tutorial)
 
 ## 方針
 
@@ -12,10 +12,25 @@
 * ブログ
   * 更新履歴とかを適当にまとめる？
 
+### 編集について
+
+以下のファイル・ブランチ以外は自由に編集してもらって大丈夫です。
+
+* .travis.yml ファイル
+* `gh-pages` ブランチ
+
 ## ブランチについて
 
 * `master`: このブランチの内容が gh-pages に反映される
 * `gh-pages`: このブランチは bot によって自動的に更新される（.travis.yml 参照）
+
+## URLについて
+
+* `master`ブランチの内容を反映しているURL
+  * `https://aizu-vim.github.io/tutorial/`
+* そのほかのブランチ
+  * `https://aizu-vim.github.io/tutorial/branches/{branch}/`
+
 
 ## ディレクトリについて
 
@@ -46,4 +61,12 @@ $ bundle exec jekyll server
 ```
 $ bundle exec slideshow build -o slide _slide
 ```
+
+
+### 使用しているソフトウェアについて
+
+* jekyll
+  * http://jekyllrb.com/
+* slideshow
+  * https://github.com/slideshow-s9/slideshow
 
