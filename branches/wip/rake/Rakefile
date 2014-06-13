@@ -6,6 +6,7 @@ end
 
 task :blog do
   puts "# build blog"
+  system 'mkdir tmp || true'
   system 'erb _config.yml > tmp/_config.yml'
   system 'bundle exec jekyll build --config tmp/_config.yml'
 end
