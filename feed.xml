@@ -298,6 +298,10 @@ unlet &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:save_cpo&lt;/code&gt;&lt;/p
 &lt;p&gt;&lt;a href=&quot;http://mattn.kaoriya.net/software/vim/20111202085236.htm&quot;&gt;モテる男のVim Script短期集中講座&lt;/a&gt;&lt;br /&gt;
 &lt;a href=&quot;http://d.hatena.ne.jp/thinca/20100201/1265009821&quot;&gt;Vimスクリプト基礎文法最速マスター&lt;/a&gt;  &lt;/p&gt;
 
+&lt;p&gt;一から書くよりも以下のようなライブラリを使ってみると捗ります.&lt;br /&gt;
+&lt;a href=&quot;https://github.com/vim-jp/vital.vim&quot;&gt;vital.vim&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://github.com/google/maktaba&quot;&gt;maktaba&lt;/a&gt;  &lt;/p&gt;
+
 </description>
         <pubDate>Fri, 20 Jun 2014 00:00:00 +0000</pubDate>
         <link>http://aizu-vim.github.io/tutorial/tutorial/vim/2014/06/20/howtomake/</link>
