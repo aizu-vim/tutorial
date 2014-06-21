@@ -7,6 +7,304 @@
     <atom:link href="http://aizu-vim.github.io/tutorial/tutorial/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>How To Make Vim Plugin ~Aizu.vim #2~</title>
+        <description>&lt;p&gt;ここでは基本的なVim pluginの作り方を説明します.&lt;br /&gt;
+作成にあたって必要なこともまとめます.&lt;br /&gt;
+また、ここだけではなく、Vimの組み込みヘルプファイルも参照してみてください.&lt;br /&gt;
+&lt;a href=&quot;http://vim-jp.org/vimdoc-ja/usr_05.html#05.4&quot;&gt;&lt;code&gt;:help plugin&lt;/code&gt;&lt;/a&gt;&lt;br /&gt;
+日本語は&lt;a href=&quot;http://vim-jp.org/vimdoc-ja/&quot;&gt;vimdoc-ja&lt;/a&gt;を参照するか、これのpluginをインストールしてください.&lt;br /&gt;
+&lt;strong&gt;あまり細かいことは言わずに、とりあえず作ってみる方針で書いています.&lt;/strong&gt;&lt;br /&gt;
+のでおかしな所があれば言ってくれるととてもうれしいです.  &lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;vim-plugin-&quot;&gt;Vim plugin とは&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Vimをよりパワフルにし、さらなる機能を提供してくれるもの.&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;vim-plugin--1&quot;&gt;Vim plugin の種類&lt;/h3&gt;
+&lt;p&gt;普段は, ただpluginと言って一口にまとめて言っていますが、 pluginにもいくつかの種類があります.&lt;br /&gt;
+私の独断ですが、大まかにまとめてみました.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Vim plugin
+    &lt;ul&gt;
+      &lt;li&gt;global 
+        &lt;ul&gt;
+          &lt;li&gt;command&lt;/li&gt;
+          &lt;li&gt;operator&lt;/li&gt;
+          &lt;li&gt;text-obj&lt;/li&gt;
+          &lt;li&gt;etc…&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;fileType 
+        &lt;ul&gt;
+          &lt;li&gt;indent &lt;/li&gt;
+          &lt;li&gt;syntax &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;大体こんな感じだと思います.&lt;br /&gt;
+多く作られているのがglobal属のpluginですね.&lt;br /&gt;
+中でもテキストオブジェクト系なんかはすごく便利なので積極的に入れていきたいです.&lt;br /&gt;
+filetype属のpluginでは、Vimが標準でサポートしていない言語のインデントやシンタックスハイライトを追加するときに使用されます.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;vim-plugin--2&quot;&gt;Vim plugin を作るために&lt;/h3&gt;
+&lt;p&gt;Vim pluginはもちろんVim scriptで書かれます.&lt;br /&gt;
+ですが、Vimはいくつかの言語と連携できるのでscript以外でも書くことが可能です.&lt;br /&gt;
+Python, Ruby, Lua, Perlなどなどあります.&lt;br /&gt;
+しかし、デフォルトで連携可能になっているわけではないので極力Vim scriptで書くことをおすすめします。&lt;br /&gt;
+以降ではVim scriptのみ、また、上項のglobal属を前提としていきます.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;vim-script-&quot;&gt;Vim script を書く&lt;/h3&gt;
+&lt;p&gt;Vim plugin を書くにあたってをさらっと以下に記します.&lt;br /&gt;
+Vimのhelpは充実しているので、わからないことや詳細を知りたければそちらを参照して欲しいです.&lt;br /&gt;
+これらを使って、自分の書いたscriptをユーザに呼び出してもらうわけです.  &lt;/p&gt;
+
+&lt;p&gt;とりあえず、コマンドの定義です.  &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;command&lt;span class=&quot;p&quot;&gt;!&lt;/span&gt; Hoge echo &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hoge&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;これで&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;Hoge
+&lt;span class=&quot;c&quot;&gt;&amp;quot;-&amp;gt; &amp;#39;Hoge&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;こんな感じにコマンドが使用出来るようになります.&lt;br /&gt;
+と言ってもステータス行に’Hoge’と表示されるだけです.  &lt;/p&gt;
+
+&lt;p&gt;これだけではインタラクティブでは無いですね.&lt;br /&gt;
+ですので、以下のようにして、ユーザの入力を受け取ります.  &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;!&lt;/span&gt; DoIt&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;arg1&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; arg2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;echomsg&lt;/span&gt; string&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;a&lt;/span&gt;:arg1&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; . string&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;a&lt;/span&gt;:arg2&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+command&lt;span class=&quot;p&quot;&gt;!&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;nargs&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;* ExecuteHoge &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; DoIt&lt;span class=&quot;p&quot;&gt;(&amp;lt;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;args&lt;span class=&quot;p&quot;&gt;&amp;gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;このようにコマンドを定義すると&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;ExecuteHoge nantoka kantoka
+&lt;span class=&quot;c&quot;&gt;&amp;quot;-&amp;gt; &amp;#39;nantoka&amp;#39;&amp;#39;kantoka&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;ユーザからの入力が取れます.&lt;br /&gt;
+さらなる詳細は&lt;a href=&quot;http://vim-jp.org/vimdoc-ja/map.html#user-commands&quot;&gt;&lt;code&gt;:help command&lt;/code&gt;&lt;/a&gt;を参照ください.  &lt;/p&gt;
+
+&lt;p&gt;他にもマッピングを定義したほうが便利な時もあります.&lt;br /&gt;
+しかし、デフォルトで決め打ちのマッピングにすると、すでにユーザが使っているかもしれません.&lt;br /&gt;
+なので、ユーザが自分でマップ出来るようにしましょう.  &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;&lt;span class=&quot;nb&quot;&gt;nnoremap&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;Plug&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;sample&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;sugoi&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; :&lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; DoIt&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;sugoi&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;kanari&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&amp;lt;&lt;/span&gt;CR&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+nmap &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;Leader&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;sg &lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;Plug&lt;span class=&quot;p&quot;&gt;&amp;gt;(&lt;/span&gt;sample&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt;sugoi&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;quot;-&amp;gt; &amp;#39;sugoi&amp;#39;&amp;#39;kanari&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;&amp;lt;Plug&amp;gt;(sample-sugoi)&lt;/code&gt;のように、先頭に&lt;code&gt;&amp;lt;Plug&amp;gt;&lt;/code&gt;をつけるとキーボードから入力されないことが保証されます.&lt;br /&gt;
+なので、次の行のようにもう一段階マッピングして、ユーザに好きなマップを使用してもらうわけです.&lt;br /&gt;
+さらなる詳細は&lt;a href=&quot;http://vim-jp.org/vimdoc-ja/map.html#user-commands&quot;&gt;&lt;code&gt;:help mapping&lt;/code&gt;&lt;/a&gt;を参照ください.  &lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;vim-plugin--3&quot;&gt;Vim plugin を書く前に&lt;/h3&gt;
+&lt;p&gt;Vim pluginはVim scriptの集合ではありますが、 ディレクトリ構成が決まっています.
+pluginを書く前にそれらを見ていきます.  &lt;/p&gt;
+
+&lt;p&gt;nantoka pluginを例とします.  &lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;nantoka_plugin/
+    &lt;ul&gt;
+      &lt;li&gt;autoload/
+        &lt;ul&gt;
+          &lt;li&gt;nantoka.vim&lt;/li&gt;
+          &lt;li&gt;nantoka/
+            &lt;ul&gt;
+              &lt;li&gt;utils.vim&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;doc/
+        &lt;ul&gt;
+          &lt;li&gt;nantoka.txt&lt;/li&gt;
+          &lt;li&gt;nantoka.jax&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;plugin/
+        &lt;ul&gt;
+          &lt;li&gt;nantoka.vim&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;まず、pluginのルートディレクトリは&lt;code&gt;nantokaディレクトリ&lt;/code&gt;になります.&lt;br /&gt;
+pluginを有効にするには.vimrcにてオプション&lt;code&gt;runtimepath&lt;/code&gt;にルートディレクトリを設定します.  &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;&lt;span class=&quot;c&quot;&gt;&amp;quot; 既存の値を消さないために=ではなく+=であることに注意.&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;runtimepath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;+=&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/home/&lt;/span&gt;mopp&lt;span class=&quot;sr&quot;&gt;/vim_plugins/&lt;/span&gt;nantoka_plugin/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;こうしておくと、nantoka_pluginが使用出来るようになります.  &lt;/p&gt;
+
+&lt;p&gt;さて、ルートディレクトリ内には&lt;code&gt;autoloadディレクトリ&lt;/code&gt;, &lt;code&gt;docディレクトリ&lt;/code&gt;, &lt;code&gt;pluginディレクトリ&lt;/code&gt;の3つがあります.
+それぞれ、役割あるのそれぞれ見ていきます.  &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;pluginディレクトリ&lt;/strong&gt;&lt;br /&gt;
+    plugin script用のディレクトリです.&lt;br /&gt;
+    ここにVim scriptを書き記したファイルを入れておくと起動時にVimが読み込んでくれます.&lt;br /&gt;
+    ですので、先に紹介したコマンドやマッピングの定義はここで行いましょう.  &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;autoloadディレクトリ&lt;/strong&gt;&lt;br /&gt;
+    ここには”呼びだされた時に通り自動的に読み込んでほしい関数”を定義したファイルをおいておきます.&lt;br /&gt;
+    pluginディレクトリは起動時にすべてのファイルが読み込まれます.&lt;br /&gt;
+    当然、関数が大きく、たくさん定義されていれば読み込みには時間がかかってしまいます.&lt;br /&gt;
+    これはVimmer(特にCUI派)にとって由々しき事態です.&lt;br /&gt;
+    それを回避するために、初期化処理以外を出来る限りautoloadディレクトリに置くべきです.&lt;br /&gt;
+    そして、その関数の定義は通常のものと区別するために少しだけ違います.&lt;br /&gt;
+    また、名前空間的な役割も持っています.&lt;br /&gt;
+    詳しくは&lt;a href=&quot;http://vim-jp.org/vimdoc-ja/usr_41.html#41.15&quot;&gt;&lt;code&gt;:help write-library-script&lt;/code&gt;&lt;/a&gt;を参照してください.  &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;docディレクトリ&lt;/strong&gt;&lt;br /&gt;
+    名前から大体想像がつくと思いますが、pluginのドキュメントファイルをおいておきます.&lt;br /&gt;
+    この例だと&lt;code&gt;help nantoka&lt;/code&gt;というふうに参照されます.&lt;br /&gt;
+    txtファイルが通常のヘルプ(英語)でjaxが日本語のヘルプファイルになります.&lt;br /&gt;
+    詳しくは&lt;a href=&quot;http://vim-jp.org/vimdoc-ja/usr_41.html#write-local-help&quot;&gt;&lt;code&gt;:help write-local-help&lt;/code&gt;&lt;/a&gt;を参照してください.  &lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;vim-plugin--4&quot;&gt;Vim plugin を書く&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://vim-jp.org/vimdoc-ja/usr_05.html#05.4&quot;&gt;&lt;code&gt;:help plugin&lt;/code&gt;&lt;/a&gt;にもあるような感じに、適当なサンプルpluginを見て行きましょう.  &lt;/p&gt;
+
+&lt;p&gt;サンプルはこいつです.&lt;br /&gt;
+&lt;strong&gt;&lt;a href=&quot;https://github.com/mopp/shinchoku.vim&quot;&gt;mopp/shinchoku.vim&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;以前、ノリで作ったものです.&lt;br /&gt;
+ディレクトリ構成は前項にならってます.  &lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;shinchoku.vim/
+    &lt;ul&gt;
+      &lt;li&gt;autoload/
+        &lt;ul&gt;
+          &lt;li&gt;shinchoku.vim&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;plugin/
+        &lt;ul&gt;
+          &lt;li&gt;shinchoku.vim&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;README.md&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;README.mdには最低限の説明を書いておくといいでしょう&lt;s&gt;(ドキュメントを書くのがめんどいので)&lt;/s&gt;  &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; exists&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;g:loaded_shinchoku&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;finish&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;g&lt;/span&gt;:loaded_shinchoku &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:save_cpo &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &amp;amp;&lt;span class=&quot;nb&quot;&gt;cpo&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cpo&lt;/span&gt;&amp;amp;&lt;span class=&quot;k&quot;&gt;vim&lt;/span&gt;
+
+
+augroup shinchoku
+    autocmd&lt;span class=&quot;p&quot;&gt;!&lt;/span&gt;
+    autocmd &lt;span class=&quot;nb&quot;&gt;CursorHold&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;CursorHoldI&lt;/span&gt; * &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; shinchoku#echo_shinchoku&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    autocmd &lt;span class=&quot;nb&quot;&gt;CursorHold&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;CursorHoldI&lt;/span&gt; * &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; shinchoku#ask_shinchoku&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+augroup END
+
+
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &amp;amp;&lt;span class=&quot;nb&quot;&gt;cpo&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:save_cpo
+unlet &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:save_cpo&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;頭の方から説明していきましょう.&lt;br /&gt;
+&lt;code&gt;if exists(&#39;g:loaded_shinchoku&#39;)&lt;/code&gt;から始まる先頭4行はこのscriptファイルの多重読み込み防止用に書いておきます.&lt;br /&gt;
+&lt;code&gt;cpo&lt;/code&gt;関連は互換オプションの設定です、以降のscriptで変更があるかもしれないので保存しておきます.&lt;br /&gt;
+ここまではテンプレのようなものです.  &lt;/p&gt;
+
+&lt;p&gt;続いて、オートコマンドを定義します.&lt;br /&gt;
+ここでも、普通はplugin名でいいと思いますがオートグループ名はかぶりにくいものにしましょう.  &lt;/p&gt;
+
+&lt;p&gt;さて、このオートコマンドでは&lt;code&gt;call shinchoku#echo_shinchoku()&lt;/code&gt;と、関数を呼び出しています.&lt;br /&gt;
+これが先に説明した、autoloadの関数です.&lt;br /&gt;
+autoload関数の名前は、#の前が読み込むファイル名、それに続いて、関数名となっています.&lt;br /&gt;
+この例ではautoload内の&lt;code&gt;shinchoku.vim&lt;/code&gt;というが関数呼び出し時に、読み込まれていなければ読み込まれて、から関数が実行されます.&lt;br /&gt;
+次に、そのautoload関数の定義を見てみましょう.  &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;vim&quot;&gt;&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:save_cpo &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &amp;amp;&lt;span class=&quot;nb&quot;&gt;cpo&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;cpo&lt;/span&gt;&amp;amp;&lt;span class=&quot;k&quot;&gt;vim&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;g&lt;/span&gt;:shinchoku#say_command &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;g&lt;/span&gt;:&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;shinchoku#say_command&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:is_shaberu &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; exists&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;:ShaberuSay&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; ? &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; : &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:shinchoku_str &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;進捗どうですか&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:no_shinchoku_counter &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;!&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:say_shinchoku&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    execute &lt;span class=&quot;s2&quot;&gt;&amp;quot;ShaberuSay&amp;quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:shinchoku_str
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;!&lt;/span&gt; shinchoku#echo_shinchoku&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:no_shinchoku_counter &lt;span class=&quot;p&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:no_shinchoku_counter % &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:shinchoku_str .&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;!&amp;#39;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;echomsg&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:shinchoku_str
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;!&lt;/span&gt; shinchoku#ask_shinchoku&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:is_shaberu &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;g&lt;/span&gt;:shinchoku#say_command &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; store &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;g&lt;/span&gt;:shaberu_user_define_say_command
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;g&lt;/span&gt;:shaberu_user_define_say_command &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;g&lt;/span&gt;:shinchoku#say_command
+        &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:say_shinchoku&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;g&lt;/span&gt;:shaberu_user_define_say_command &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; store
+    &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;call&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:say_shinchoku&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;endfunction&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;let&lt;/span&gt; &amp;amp;&lt;span class=&quot;nb&quot;&gt;cpo&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:save_cpo
+unlet &lt;span class=&quot;k&quot;&gt;s&lt;/span&gt;:save_cpo&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;function! shinchoku#echo_shinchoku()&lt;/code&gt;のように&lt;code&gt;ファイル名#関数名&lt;/code&gt;として定義します.&lt;br /&gt;
+短いpluginなのでこのくらいの説明で問題ないと思います.  &lt;/p&gt;
+
+&lt;p&gt;こんな感じでpluginを書いていきましょう.  &lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;参考&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;http://mattn.kaoriya.net/software/vim/20111202085236.htm&quot;&gt;モテる男のVim Script短期集中講座&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;http://d.hatena.ne.jp/thinca/20100201/1265009821&quot;&gt;Vimスクリプト基礎文法最速マスター&lt;/a&gt;  &lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 20 Jun 2014 00:00:00 +0000</pubDate>
+        <link>http://aizu-vim.github.io/tutorial/tutorial/vim/2014/06/20/howtomake/</link>
+        <guid isPermaLink="true">http://aizu-vim.github.io/tutorial/tutorial/vim/2014/06/20/howtomake/</guid>
+      </item>
+    
+      <item>
         <title>やったこと（記事のサンプル）</title>
         <description>&lt;p&gt;Travis CI 周りの整備をおこないました。&lt;/p&gt;
 

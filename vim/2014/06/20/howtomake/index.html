@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>How To Make Vim Plugin ~Aizu.vim #2~</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.">
+    <link rel="canonical" href="http://aizu-vim.github.io/tutorial/tutorial/vim/2014/06/20/howtomake/">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/tutorial/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/tutorial/">Your awesome title</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          <a class="page-link" href="/tutorial/about/">About</a>
+        
+          <a class="page-link" href="/tutorial/feed.xml"></a>
+        
+          <a class="page-link" href="/tutorial/"></a>
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>How To Make Vim Plugin ~Aizu.vim #2~</h1>
+    <p class="meta">Jun 20, 2014</p>
+  </header>
+
+  <article class="post-content">
+  <p>ここでは基本的なVim pluginの作り方を説明します.<br />
+作成にあたって必要なこともまとめます.<br />
+また、ここだけではなく、Vimの組み込みヘルプファイルも参照してみてください.<br />
+<a href="http://vim-jp.org/vimdoc-ja/usr_05.html#05.4"><code>:help plugin</code></a><br />
+日本語は<a href="http://vim-jp.org/vimdoc-ja/">vimdoc-ja</a>を参照するか、これのpluginをインストールしてください.<br />
+<strong>あまり細かいことは言わずに、とりあえず作ってみる方針で書いています.</strong><br />
+のでおかしな所があれば言ってくれるととてもうれしいです.  </p>
+
+<hr />
+
+<h3 id="vim-plugin-">Vim plugin とは</h3>
+<ul>
+  <li><strong>Vimをよりパワフルにし、さらなる機能を提供してくれるもの.</strong></li>
+</ul>
+
+<hr />
+
+<h3 id="vim-plugin--1">Vim plugin の種類</h3>
+<p>普段は, ただpluginと言って一口にまとめて言っていますが、 pluginにもいくつかの種類があります.<br />
+私の独断ですが、大まかにまとめてみました.</p>
+
+<ul>
+  <li>Vim plugin
+    <ul>
+      <li>global 
+        <ul>
+          <li>command</li>
+          <li>operator</li>
+          <li>text-obj</li>
+          <li>etc…</li>
+        </ul>
+      </li>
+      <li>fileType 
+        <ul>
+          <li>indent </li>
+          <li>syntax </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>大体こんな感じだと思います.<br />
+多く作られているのがglobal属のpluginですね.<br />
+中でもテキストオブジェクト系なんかはすごく便利なので積極的に入れていきたいです.<br />
+filetype属のpluginでは、Vimが標準でサポートしていない言語のインデントやシンタックスハイライトを追加するときに使用されます.</p>
+
+<hr />
+
+<h3 id="vim-plugin--2">Vim plugin を作るために</h3>
+<p>Vim pluginはもちろんVim scriptで書かれます.<br />
+ですが、Vimはいくつかの言語と連携できるのでscript以外でも書くことが可能です.<br />
+Python, Ruby, Lua, Perlなどなどあります.<br />
+しかし、デフォルトで連携可能になっているわけではないので極力Vim scriptで書くことをおすすめします。<br />
+以降ではVim scriptのみ、また、上項のglobal属を前提としていきます.</p>
+
+<hr />
+
+<h3 id="vim-script-">Vim script を書く</h3>
+<p>Vim plugin を書くにあたってをさらっと以下に記します.<br />
+Vimのhelpは充実しているので、わからないことや詳細を知りたければそちらを参照して欲しいです.<br />
+これらを使って、自分の書いたscriptをユーザに呼び出してもらうわけです.  </p>
+
+<p>とりあえず、コマンドの定義です.  </p>
+
+<div class="highlight"><pre><code class="vim"><span class="p">:</span>command<span class="p">!</span> Hoge echo <span class="s2">&quot;Hoge&quot;</span></code></pre></div>
+
+<p>これで</p>
+
+<div class="highlight"><pre><code class="vim"><span class="p">:</span>Hoge
+<span class="c">&quot;-&gt; &#39;Hoge&#39;</span></code></pre></div>
+
+<p>こんな感じにコマンドが使用出来るようになります.<br />
+と言ってもステータス行に’Hoge’と表示されるだけです.  </p>
+
+<p>これだけではインタラクティブでは無いですね.<br />
+ですので、以下のようにして、ユーザの入力を受け取ります.  </p>
+
+<div class="highlight"><pre><code class="vim"><span class="k">function</span><span class="p">!</span> DoIt<span class="p">(</span>arg1<span class="p">,</span> arg2<span class="p">)</span>
+    <span class="k">echomsg</span> string<span class="p">(</span><span class="k">a</span>:arg1<span class="p">)</span> . string<span class="p">(</span><span class="k">a</span>:arg2<span class="p">)</span>
+<span class="k">endfunction</span>
+command<span class="p">!</span> <span class="p">-</span>nargs<span class="p">=</span>* ExecuteHoge <span class="k">call</span> DoIt<span class="p">(&lt;</span><span class="k">f</span><span class="p">-</span>args<span class="p">&gt;)</span></code></pre></div>
+
+<p>このようにコマンドを定義すると</p>
+
+<div class="highlight"><pre><code class="vim"><span class="p">:</span>ExecuteHoge nantoka kantoka
+<span class="c">&quot;-&gt; &#39;nantoka&#39;&#39;kantoka&#39;</span></code></pre></div>
+
+<p>ユーザからの入力が取れます.<br />
+さらなる詳細は<a href="http://vim-jp.org/vimdoc-ja/map.html#user-commands"><code>:help command</code></a>を参照ください.  </p>
+
+<p>他にもマッピングを定義したほうが便利な時もあります.<br />
+しかし、デフォルトで決め打ちのマッピングにすると、すでにユーザが使っているかもしれません.<br />
+なので、ユーザが自分でマップ出来るようにしましょう.  </p>
+
+<div class="highlight"><pre><code class="vim"><span class="nb">nnoremap</span> <span class="p">&lt;</span>Plug<span class="p">&gt;(</span>sample<span class="p">-</span>sugoi<span class="p">)</span> :<span class="k">call</span> DoIt<span class="p">(</span><span class="s1">&#39;sugoi&#39;</span><span class="p">,</span> <span class="s1">&#39;kanari&#39;</span><span class="p">)&lt;</span>CR<span class="p">&gt;</span>
+nmap <span class="p">&lt;</span>Leader<span class="p">&gt;</span>sg <span class="p">&lt;</span>Plug<span class="p">&gt;(</span>sample<span class="p">-</span>sugoi<span class="p">)</span>
+<span class="c">&quot;-&gt; &#39;sugoi&#39;&#39;kanari&#39;</span></code></pre></div>
+
+<p><code>&lt;Plug&gt;(sample-sugoi)</code>のように、先頭に<code>&lt;Plug&gt;</code>をつけるとキーボードから入力されないことが保証されます.<br />
+なので、次の行のようにもう一段階マッピングして、ユーザに好きなマップを使用してもらうわけです.<br />
+さらなる詳細は<a href="http://vim-jp.org/vimdoc-ja/map.html#user-commands"><code>:help mapping</code></a>を参照ください.  </p>
+
+<hr />
+
+<h3 id="vim-plugin--3">Vim plugin を書く前に</h3>
+<p>Vim pluginはVim scriptの集合ではありますが、 ディレクトリ構成が決まっています.
+pluginを書く前にそれらを見ていきます.  </p>
+
+<p>nantoka pluginを例とします.  </p>
+
+<ul>
+  <li>nantoka_plugin/
+    <ul>
+      <li>autoload/
+        <ul>
+          <li>nantoka.vim</li>
+          <li>nantoka/
+            <ul>
+              <li>utils.vim</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>doc/
+        <ul>
+          <li>nantoka.txt</li>
+          <li>nantoka.jax</li>
+        </ul>
+      </li>
+      <li>plugin/
+        <ul>
+          <li>nantoka.vim</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>まず、pluginのルートディレクトリは<code>nantokaディレクトリ</code>になります.<br />
+pluginを有効にするには.vimrcにてオプション<code>runtimepath</code>にルートディレクトリを設定します.  </p>
+
+<div class="highlight"><pre><code class="vim"><span class="c">&quot; 既存の値を消さないために=ではなく+=であることに注意.</span>
+<span class="k">set</span> <span class="nb">runtimepath</span><span class="p">+=</span><span class="sr">/home/</span>mopp<span class="sr">/vim_plugins/</span>nantoka_plugin/</code></pre></div>
+
+<p>こうしておくと、nantoka_pluginが使用出来るようになります.  </p>
+
+<p>さて、ルートディレクトリ内には<code>autoloadディレクトリ</code>, <code>docディレクトリ</code>, <code>pluginディレクトリ</code>の3つがあります.
+それぞれ、役割あるのそれぞれ見ていきます.  </p>
+
+<p><strong>pluginディレクトリ</strong><br />
+    plugin script用のディレクトリです.<br />
+    ここにVim scriptを書き記したファイルを入れておくと起動時にVimが読み込んでくれます.<br />
+    ですので、先に紹介したコマンドやマッピングの定義はここで行いましょう.  </p>
+
+<p><strong>autoloadディレクトリ</strong><br />
+    ここには”呼びだされた時に通り自動的に読み込んでほしい関数”を定義したファイルをおいておきます.<br />
+    pluginディレクトリは起動時にすべてのファイルが読み込まれます.<br />
+    当然、関数が大きく、たくさん定義されていれば読み込みには時間がかかってしまいます.<br />
+    これはVimmer(特にCUI派)にとって由々しき事態です.<br />
+    それを回避するために、初期化処理以外を出来る限りautoloadディレクトリに置くべきです.<br />
+    そして、その関数の定義は通常のものと区別するために少しだけ違います.<br />
+    また、名前空間的な役割も持っています.<br />
+    詳しくは<a href="http://vim-jp.org/vimdoc-ja/usr_41.html#41.15"><code>:help write-library-script</code></a>を参照してください.  </p>
+
+<p><strong>docディレクトリ</strong><br />
+    名前から大体想像がつくと思いますが、pluginのドキュメントファイルをおいておきます.<br />
+    この例だと<code>help nantoka</code>というふうに参照されます.<br />
+    txtファイルが通常のヘルプ(英語)でjaxが日本語のヘルプファイルになります.<br />
+    詳しくは<a href="http://vim-jp.org/vimdoc-ja/usr_41.html#write-local-help"><code>:help write-local-help</code></a>を参照してください.  </p>
+
+<hr />
+
+<h3 id="vim-plugin--4">Vim plugin を書く</h3>
+<p><a href="http://vim-jp.org/vimdoc-ja/usr_05.html#05.4"><code>:help plugin</code></a>にもあるような感じに、適当なサンプルpluginを見て行きましょう.  </p>
+
+<p>サンプルはこいつです.<br />
+<strong><a href="https://github.com/mopp/shinchoku.vim">mopp/shinchoku.vim</a></strong></p>
+
+<p>以前、ノリで作ったものです.<br />
+ディレクトリ構成は前項にならってます.  </p>
+
+<ul>
+  <li>shinchoku.vim/
+    <ul>
+      <li>autoload/
+        <ul>
+          <li>shinchoku.vim</li>
+        </ul>
+      </li>
+      <li>plugin/
+        <ul>
+          <li>shinchoku.vim</li>
+        </ul>
+      </li>
+      <li>README.md</li>
+    </ul>
+  </li>
+</ul>
+
+<p>README.mdには最低限の説明を書いておくといいでしょう<s>(ドキュメントを書くのがめんどいので)</s>  </p>
+
+<div class="highlight"><pre><code class="vim"><span class="k">if</span> exists<span class="p">(</span><span class="s1">&#39;g:loaded_shinchoku&#39;</span><span class="p">)</span>
+    <span class="k">finish</span>
+<span class="k">endif</span>
+<span class="k">let</span> <span class="k">g</span>:loaded_shinchoku <span class="p">=</span> <span class="m">1</span>
+
+<span class="k">let</span> <span class="k">s</span>:save_cpo <span class="p">=</span> &amp;<span class="nb">cpo</span>
+<span class="k">set</span> <span class="nb">cpo</span>&amp;<span class="k">vim</span>
+
+
+augroup shinchoku
+    autocmd<span class="p">!</span>
+    autocmd <span class="nb">CursorHold</span><span class="p">,</span><span class="nb">CursorHoldI</span> * <span class="k">call</span> shinchoku#echo_shinchoku<span class="p">()</span>
+    autocmd <span class="nb">CursorHold</span><span class="p">,</span><span class="nb">CursorHoldI</span> * <span class="k">call</span> shinchoku#ask_shinchoku<span class="p">()</span>
+augroup END
+
+
+<span class="k">let</span> &amp;<span class="nb">cpo</span> <span class="p">=</span> <span class="k">s</span>:save_cpo
+unlet <span class="k">s</span>:save_cpo</code></pre></div>
+
+<p>頭の方から説明していきましょう.<br />
+<code>if exists('g:loaded_shinchoku')</code>から始まる先頭4行はこのscriptファイルの多重読み込み防止用に書いておきます.<br />
+<code>cpo</code>関連は互換オプションの設定です、以降のscriptで変更があるかもしれないので保存しておきます.<br />
+ここまではテンプレのようなものです.  </p>
+
+<p>続いて、オートコマンドを定義します.<br />
+ここでも、普通はplugin名でいいと思いますがオートグループ名はかぶりにくいものにしましょう.  </p>
+
+<p>さて、このオートコマンドでは<code>call shinchoku#echo_shinchoku()</code>と、関数を呼び出しています.<br />
+これが先に説明した、autoloadの関数です.<br />
+autoload関数の名前は、#の前が読み込むファイル名、それに続いて、関数名となっています.<br />
+この例ではautoload内の<code>shinchoku.vim</code>というが関数呼び出し時に、読み込まれていなければ読み込まれて、から関数が実行されます.<br />
+次に、そのautoload関数の定義を見てみましょう.  </p>
+
+<div class="highlight"><pre><code class="vim"><span class="k">let</span> <span class="k">s</span>:save_cpo <span class="p">=</span> &amp;<span class="nb">cpo</span>
+<span class="k">set</span> <span class="nb">cpo</span>&amp;<span class="k">vim</span>
+
+
+<span class="k">let</span> <span class="k">g</span>:shinchoku#say_command <span class="p">=</span> <span class="k">get</span><span class="p">(</span><span class="k">g</span>:<span class="p">,</span> <span class="s1">&#39;shinchoku#say_command&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="k">s</span>:is_shaberu <span class="p">=</span> exists<span class="p">(</span><span class="s1">&#39;:ShaberuSay&#39;</span><span class="p">)</span> <span class="p">==</span> <span class="m">2</span> ? <span class="m">1</span> : <span class="m">0</span>
+<span class="k">let</span> <span class="k">s</span>:shinchoku_str <span class="p">=</span> <span class="s1">&#39;進捗どうですか&#39;</span>
+<span class="k">let</span> <span class="k">s</span>:no_shinchoku_counter <span class="p">=</span> <span class="m">0</span>
+
+<span class="k">function</span><span class="p">!</span> <span class="k">s</span>:say_shinchoku<span class="p">()</span>
+    execute <span class="s2">&quot;ShaberuSay&quot;</span> <span class="k">s</span>:shinchoku_str
+<span class="k">endfunction</span>
+
+<span class="k">function</span><span class="p">!</span> shinchoku#echo_shinchoku<span class="p">()</span>
+    <span class="k">let</span> <span class="k">s</span>:no_shinchoku_counter <span class="p">+=</span> <span class="m">1</span>
+
+    <span class="k">if</span> <span class="k">s</span>:no_shinchoku_counter % <span class="m">2</span> <span class="p">==</span> <span class="m">0</span>
+        <span class="k">let</span> <span class="k">s</span>:shinchoku_str .<span class="p">=</span> <span class="s1">&#39;!&#39;</span>
+    <span class="k">endif</span>
+
+    <span class="k">echomsg</span> <span class="k">s</span>:shinchoku_str
+<span class="k">endfunction</span>
+
+
+<span class="k">function</span><span class="p">!</span> shinchoku#ask_shinchoku<span class="p">()</span>
+    <span class="k">if</span> <span class="k">s</span>:is_shaberu <span class="p">!=</span> <span class="m">1</span>
+        <span class="k">return</span>
+    <span class="k">endif</span>
+
+    <span class="k">if</span> <span class="k">g</span>:shinchoku#say_command <span class="p">!=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">let</span> store <span class="p">=</span> <span class="k">g</span>:shaberu_user_define_say_command
+        <span class="k">let</span> <span class="k">g</span>:shaberu_user_define_say_command <span class="p">=</span> <span class="k">g</span>:shinchoku#say_command
+        <span class="k">call</span> <span class="k">s</span>:say_shinchoku<span class="p">()</span>
+        <span class="k">let</span> <span class="k">g</span>:shaberu_user_define_say_command <span class="p">=</span> store
+    <span class="k">else</span>
+        <span class="k">call</span> <span class="k">s</span>:say_shinchoku<span class="p">()</span>
+    <span class="k">endif</span>
+<span class="k">endfunction</span>
+
+
+<span class="k">let</span> &amp;<span class="nb">cpo</span> <span class="p">=</span> <span class="k">s</span>:save_cpo
+unlet <span class="k">s</span>:save_cpo</code></pre></div>
+
+<p><code>function! shinchoku#echo_shinchoku()</code>のように<code>ファイル名#関数名</code>として定義します.<br />
+短いpluginなのでこのくらいの説明で問題ないと思います.  </p>
+
+<p>こんな感じでpluginを書いていきましょう.  </p>
+
+<hr />
+
+<h3 id="section">参考</h3>
+<p><a href="http://mattn.kaoriya.net/software/vim/20111202085236.htm">モテる男のVim Script短期集中講座</a><br />
+<a href="http://d.hatena.ne.jp/thinca/20100201/1265009821">Vimスクリプト基礎文法最速マスター</a>  </p>
+
+
+  </article>
+
+</div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">Your awesome title</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>Your awesome title</li>
+        <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+      <ul>
+        <li>
+          <a href="https://github.com/">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username"></span>
+          </a>
+        </li>
+        <li>
+          <a href="https://twitter.com/">
+            <span class="icon twitter">
+              <svg version="1.1" class="twitter-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill="#C2C2C2" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27
+                c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767
+                c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206
+                C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271
+                c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469
+                c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+              </svg>
+            </span>
+            <span class="username"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="footer-col-3 column">
+      <p class="text">Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>
