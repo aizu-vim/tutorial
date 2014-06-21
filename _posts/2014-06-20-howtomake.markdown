@@ -283,5 +283,9 @@ unlet s:save_cpo
 ### 参考
 [モテる男のVim Script短期集中講座](http://mattn.kaoriya.net/software/vim/20111202085236.htm)  
 [Vimスクリプト基礎文法最速マスター](http://d.hatena.ne.jp/thinca/20100201/1265009821)  
+  
+一から書くよりも以下のようなライブラリを使ってみると捗ります.  
+[vital.vim](https://github.com/vim-jp/vital.vim)  
+[maktaba](https://github.com/google/maktaba)  
 
 
